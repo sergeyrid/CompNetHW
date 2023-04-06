@@ -40,9 +40,10 @@ def ftp_retrieve(ftp, filename, output_block):
         showerror('Opening failed', f'Failed to open file {filename}')
 
 
-def ftp_delete(ftp: FTP, filename):
+def ftp_delete(ftp, filename, output_block):
     try:
         ftp.delete(filename)
+        ftp_list(ftp, output_block)
         showinfo('Successful deletion', f'File {filename} deleted.')
     except:
         showerror('Deletion failed', f'Could not delete file {filename}')
@@ -149,7 +150,7 @@ class ControlBlock(ttk.Frame):
         update_button.grid(row=2, column=2)
 
         delete_button = ttk.Button(self, text='Delete', command=lambda:
-                                   ftp_delete(ftp, file_entry.get()))
+                                   ftp_delete(ftp, file_entry.get(), output_block))
         delete_button.grid(row=3, column=2)
 
 
@@ -157,7 +158,6 @@ def main():
     ftp = FTP()
 
     root = Tk()
-
     root.grid_columnconfigure(0, weight=1, uniform="fred")
 
     output_block = OutputBlock(root)
